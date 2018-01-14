@@ -6,9 +6,9 @@ const data = [
 ]
 
 class Transformation {
-    constructor() {
+    constructor(length) {
         this.domainSpace = {
-            x: 4,
+            x: length,
             y: 500
         };
         
@@ -26,13 +26,41 @@ class Transformation {
     }
 }
 
-const transform = new Transformation();
+class Polygone {
+    constructor() {
+        this.points = []
+    };
 
-for(let entry of data) {
+    add(point) {
+        this.points.push(point);
+    }
+
+    render() {
+        const line = this.points
+            .map(({x, y}) => `${x},${y}`)
+            .join(' ');
+        return `<polygon points="${line}" />`;
+    }
+}
+
+const transform = new Transformation(data.length);
+const poly = new Polygone();
+
+for(let index=0; index < data.length; index++) {
+    let entry = data[index];
     let point = {
-        x: entry[0],
+        x: index,
+        y: entry[0]
+    };
+    poly.add(transform.translate(point));
+}
+
+for(let index=(data.length-1); index >= 0; index--) {
+    let entry = data[index];
+    let point = {
+        x: index,
         y: entry[1]
     };
-    let displayPoint = transform.translate(point);
-    console.log(displayPoint);
+    poly.add(transform.translate(point));
 }
+console.log(poly.render());
