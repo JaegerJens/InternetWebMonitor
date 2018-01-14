@@ -50,21 +50,25 @@ class Polygone {
 }
 
 const transform = new Transformation(data.length);
-const poly = new Polygone();
 
+function drawData() {
+    const poly = new Polygone();
 
-function drawLine(index, start, stop, step) {
-    for(let k=start; stop(k); k = step(k)) {
-        let entry = data[k];
-        let point = {
-            x: k,
-            y: entry[index]
+    function drawLine(index, start, stop, step) {
+        for(let k=start; stop(k); k = step(k)) {
+            let entry = data[k];
+            let point = {
+                x: k,
+                y: entry[index]
+            }
+            poly.add(transform.translate(point));
         }
-        poly.add(transform.translate(point));
     }
+
+    drawLine(0, 0, x => x < data.length, x => x+1);
+    drawLine(1, data.length - 1, x => x >= 0, x => x-1);
+    
+    poly.render();
 }
 
-drawLine(0, 0, x => x < data.length, x => x+1);
-drawLine(1, data.length - 1, x => x >= 0, x => x-1);
-
-console.log(poly.render());
+drawData();
