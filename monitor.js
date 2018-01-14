@@ -46,21 +46,19 @@ class Polygone {
 const transform = new Transformation(data.length);
 const poly = new Polygone();
 
-for(let index=0; index < data.length; index++) {
-    let entry = data[index];
-    let point = {
-        x: index,
-        y: entry[0]
-    };
-    poly.add(transform.translate(point));
+
+function drawLine(index, start, stop, step) {
+    for(let k=start; stop(k); k = step(k)) {
+        let entry = data[k];
+        let point = {
+            x: k,
+            y: entry[index]
+        }
+        poly.add(transform.translate(point));
+    }
 }
 
-for(let index=(data.length-1); index >= 0; index--) {
-    let entry = data[index];
-    let point = {
-        x: index,
-        y: entry[1]
-    };
-    poly.add(transform.translate(point));
-}
+drawLine(0, 0, x => x < data.length, x => x+1);
+drawLine(1, data.length - 1, x => x >= 0, x => x-1);
+
 console.log(poly.render());
