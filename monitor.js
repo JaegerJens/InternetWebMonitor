@@ -29,6 +29,8 @@ class Transformation {
 class Polygone {
     constructor() {
         this.points = []
+        this.svgContext = document.getElementsByTagName('svg')[0];
+        this.svgNamespace = this.svgContext.namespaceURI;
     };
 
     add(point) {
@@ -39,6 +41,10 @@ class Polygone {
         const line = this.points
             .map(({x, y}) => `${x},${y}`)
             .join(' ');
+
+        const poly = document.createElementNS(this.svgNamespace, 'polygon');
+        poly.setAttribute('points', line);
+        this.svgContext.appendChild(poly);
         return `<polygon points="${line}" />`;
     }
 }
